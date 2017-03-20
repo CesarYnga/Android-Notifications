@@ -2,5 +2,6 @@
 <resources>
     <string-array name="notifications">
         <item>Basic</item>
+        <item>Basic with back stack</item>
     </string-array>
 </resources>

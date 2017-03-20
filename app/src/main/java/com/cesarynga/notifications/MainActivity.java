@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case 0:
                 showNotification(buildBasicNotification());
                 break;
+            case 1:
+                showNotification(buildNotificationWithBackStack());
+                break;
         }
     }
 
@@ -55,6 +58,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         .setColor(Color.parseColor("#71b32a"))
                         .setContentTitle("My notification")
                         .setContentText("Base notification")
+                        .setAutoCancel(true) // remove the notification from status bar
+                        .setContentIntent(resultPendingIntent);
+
+        return builder.build();
+    }
+
+    private Notification buildNotificationWithBackStack() {
+        Intent resultIntent = new Intent(this, ResultActivity.class);
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+        taskStackBuilder.addParentStack(ResultActivity.class);
+        taskStackBuilder.addNextIntent(resultIntent);
+
+        PendingIntent resultPendingIntent = taskStackBuilder.getPendingIntent(
+                0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setPriority(Notification.PRIORITY_HIGH) // priority High makes notification shows as head-up
+                        .setSmallIcon(R.drawable.ic_notification) // notification icon, required
+                        .setColor(Color.parseColor("#71b32a"))
+                        .setContentTitle("My notification")
+                        .setContentText("Notification with back stack")
                         .setAutoCancel(true) // remove the notification from status bar
                         .setContentIntent(resultPendingIntent);
 
