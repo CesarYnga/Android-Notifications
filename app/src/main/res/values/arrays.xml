@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="notifications">
-        <item>Basic</item>
-        <item>Basic with back stack</item>
+        <item>Basic notification</item>
+        <item>Notification with back stack</item>
+        <item>Notification with actions</item>
     </string-array>
 </resources>

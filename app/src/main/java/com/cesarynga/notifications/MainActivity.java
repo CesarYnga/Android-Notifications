@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case 1:
                 showNotification(buildNotificationWithBackStack());
                 break;
+            case 2:
+                showNotification(buildNotificationWithActions());
+                break;
         }
     }
 
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         .setSmallIcon(R.drawable.ic_notification) // notification icon, required
                         .setColor(Color.parseColor("#71b32a"))
                         .setContentTitle("My notification")
-                        .setContentText("Base notification")
+                        .setContentText("Basic notification")
                         .setAutoCancel(true) // remove the notification from status bar
                         .setContentIntent(resultPendingIntent);
 
@@ -82,6 +85,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         .setColor(Color.parseColor("#71b32a"))
                         .setContentTitle("My notification")
                         .setContentText("Notification with back stack")
+                        .setAutoCancel(true) // remove the notification from status bar
+                        .setContentIntent(resultPendingIntent);
+
+        return builder.build();
+    }
+
+    private Notification buildNotificationWithActions() {
+        Intent resultIntent = new Intent(this, ResultActivity.class);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
+                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setPriority(Notification.PRIORITY_HIGH) // priority High makes notification shows as head-up
+                        .setSmallIcon(R.drawable.ic_notification) // notification icon, required
+                        .setColor(Color.parseColor("#71b32a"))
+                        .setContentTitle("My notification")
+                        .setContentText("Notification with actions")
+                        .addAction(R.drawable.ic_dismiss, "Dismiss", resultPendingIntent)
+                        .addAction(R.drawable.ic_snooze, "Snooze", resultPendingIntent)
                         .setAutoCancel(true) // remove the notification from status bar
                         .setContentIntent(resultPendingIntent);
 
