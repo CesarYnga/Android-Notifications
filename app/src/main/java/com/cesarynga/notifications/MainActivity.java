@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case 2:
                 showNotification(buildNotificationWithActions(3), 3);
                 break;
+            case 3:
+                showNotification(buildNotificationWithBigTextStyle(), 4);
+                break;
         }
     }
 
@@ -115,6 +118,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         .addAction(R.drawable.ic_dismiss, "Dismiss", dismissPendingIntent)
                         .addAction(R.drawable.ic_snooze, "Snooze", snoozePendingIntent)
                         .setAutoCancel(true); // remove the notification from status bar
+
+        return builder.build();
+    }
+
+    private Notification buildNotificationWithBigTextStyle() {
+        Intent resultIntent = new Intent(this, ResultActivity.class);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
+                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setPriority(Notification.PRIORITY_HIGH) // priority High makes notification shows as head-up
+                        .setSmallIcon(R.drawable.ic_notification) // notification icon, required
+                        .setColor(Color.parseColor("#71b32a"))
+                        .setContentTitle("My notification")
+                        .setContentText("Big text notification")
+                        .setAutoCancel(true) // remove the notification from status bar
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum leo sem, tincidunt et mi a, gravida sodales leo. Cras molestie sit amet diam eget interdum. In auctor tortor non velit fringilla accumsan. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean in varius nibh, sed cursus odio. Donec suscipit ultricies est non ullamcorper. Maecenas condimentum et sapien eget fermentum. Donec feugiat imperdiet tellus ut iaculis. Fusce sit amet viverra lectus, vitae vulputate quam. Pellentesque maximus erat ac metus finibus posuere."))
+                        .setContentIntent(resultPendingIntent);
 
         return builder.build();
     }

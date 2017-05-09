@@ -4,5 +4,6 @@
         <item>Basic notification</item>
         <item>Notification with back stack</item>
         <item>Notification with actions</item>
+        <item>Notification with big text style</item>
     </string-array>
 </resources>
