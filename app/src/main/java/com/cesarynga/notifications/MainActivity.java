@@ -31,20 +31,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (position) {
             case 0:
-                showNotification(buildBasicNotification());
+                showNotification(buildBasicNotification(), 1);
                 break;
             case 1:
-                showNotification(buildNotificationWithBackStack());
+                showNotification(buildNotificationWithBackStack(), 2);
                 break;
             case 2:
-                showNotification(buildNotificationWithActions());
+                showNotification(buildNotificationWithActions(3), 3);
                 break;
         }
     }
 
-    private void showNotification(Notification notification) {
+    private void showNotification(Notification notification, int id) {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(1, notification);
+        notificationManager.notify(id, notification);
     }
 
     private Notification buildBasicNotification() {
@@ -91,11 +91,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return builder.build();
     }
 
-    private Notification buildNotificationWithActions() {
-        Intent resultIntent = new Intent(this, ResultActivity.class);
+    private Notification buildNotificationWithActions(int id) {
+        Intent dismissIntent = new Intent(this, DismissReceiver.class);
+        dismissIntent.putExtra("notification_id", id);
 
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
-                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent snoozeIntent = new Intent(this, ResultActivity.class);
+        snoozeIntent.putExtra("notification_id", id);
+
+        PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(this, 0,
+                dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        PendingIntent snoozePendingIntent = PendingIntent.getActivity(this, 0,
+                snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
@@ -105,10 +112,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         .setColor(Color.parseColor("#71b32a"))
                         .setContentTitle("My notification")
                         .setContentText("Notification with actions")
-                        .addAction(R.drawable.ic_dismiss, "Dismiss", resultPendingIntent)
-                        .addAction(R.drawable.ic_snooze, "Snooze", resultPendingIntent)
-                        .setAutoCancel(true) // remove the notification from status bar
-                        .setContentIntent(resultPendingIntent);
+                        .addAction(R.drawable.ic_dismiss, "Dismiss", dismissPendingIntent)
+                        .addAction(R.drawable.ic_snooze, "Snooze", snoozePendingIntent)
+                        .setAutoCancel(true); // remove the notification from status bar
 
         return builder.build();
     }
