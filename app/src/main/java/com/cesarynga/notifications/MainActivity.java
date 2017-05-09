@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -17,6 +16,7 @@ import android.widget.ListView;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     ListView listView;
+    NotificationCompat.InboxStyle inboxStyle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         listView = (ListView) findViewById(R.id.list_view);
         listView.setOnItemClickListener(this);
+        inboxStyle = new NotificationCompat.InboxStyle();
     }
 
     @Override
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 break;
             case 3:
                 showNotification(buildNotificationWithBigTextStyle(), 4);
+                break;
+            case 4:
+                showNotification(buildNotificationWithInboxStyle(), 5);
                 break;
         }
     }
@@ -135,10 +139,36 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         .setSmallIcon(R.drawable.ic_notification) // notification icon, required
                         .setColor(Color.parseColor("#71b32a"))
                         .setContentTitle("My notification")
-                        .setContentText("Big text notification")
+                        .setContentText("Big text style notification")
                         .setAutoCancel(true) // remove the notification from status bar
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum leo sem, tincidunt et mi a, gravida sodales leo. Cras molestie sit amet diam eget interdum. In auctor tortor non velit fringilla accumsan. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean in varius nibh, sed cursus odio. Donec suscipit ultricies est non ullamcorper. Maecenas condimentum et sapien eget fermentum. Donec feugiat imperdiet tellus ut iaculis. Fusce sit amet viverra lectus, vitae vulputate quam. Pellentesque maximus erat ac metus finibus posuere."))
+                        .setContentIntent(resultPendingIntent);
+
+        return builder.build();
+    }
+
+    private Notification buildNotificationWithInboxStyle() {
+        Intent resultIntent = new Intent(this, ResultActivity.class);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
+                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        inboxStyle.addLine("New event");
+        inboxStyle.setSummaryText("My new events");
+        inboxStyle.setBigContentTitle("Big content text");
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setPriority(Notification.PRIORITY_HIGH) // priority High makes notification shows as head-up
+                        .setSmallIcon(R.drawable.ic_notification) // notification icon, required
+                        .setColor(Color.parseColor("#71b32a"))
+                        .setContentTitle("My notification")
+                        .setContentText("Inbox style notification")
+                        .setAutoCancel(true) // remove the notification from status bar
+                        .setStyle(inboxStyle)
                         .setContentIntent(resultPendingIntent);
 
         return builder.build();
